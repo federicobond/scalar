@@ -19,6 +19,7 @@ import type { ResponsesObject } from '@scalar/workspace-store/schemas/v3.1/stric
 import { computed, ref, toValue, useId } from 'vue'
 
 import ScreenReader from '@/components/ScreenReader.vue'
+import { getResponseDotColor } from '@/helpers/get-response-dot-color'
 import { ExamplePicker } from '@/v2/blocks/scalar-request-example-block'
 
 import ExampleResponse from './ExampleResponse.vue'
@@ -130,7 +131,19 @@ const showSchema = ref(false)
         :key="statusCode"
         :aria-controls="id">
         <ScreenReader>Status:</ScreenReader>
-        {{ statusCode }}
+        <div class="flex items-center gap-2">
+          <svg
+            viewBox="0 0 6 6"
+            aria-hidden="true"
+            class="size-1.5"
+            :fill="getResponseDotColor(statusCode)">
+            <circle
+              r="3"
+              cx="3"
+              cy="3" />
+          </svg>
+          {{ statusCode }}
+        </div>
       </ExampleResponseTab>
 
       <template #actions>

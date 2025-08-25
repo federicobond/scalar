@@ -6,6 +6,7 @@ import ParameterListItem from './ParameterListItem.vue'
 
 withDefaults(
   defineProps<{
+    mode: 'parameters' | 'responses'
     parameters?: RequestEntity['parameters'] | RequestEntity['responses']
     showChildren?: boolean
     collapsableItems?: boolean
@@ -14,6 +15,7 @@ withDefaults(
     breadcrumb?: string[]
   }>(),
   {
+    mode: 'parameters',
     showChildren: false,
     collapsableItems: false,
     withExamples: true,
@@ -33,6 +35,7 @@ withDefaults(
         :key="item.name"
         :breadcrumb="breadcrumb"
         :collapsableItems="collapsableItems"
+        :mode="mode"
         :parameter="item"
         :schemas="schemas"
         :showChildren="showChildren"

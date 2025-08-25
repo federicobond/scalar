@@ -6,6 +6,7 @@ import { WithBreadcrumb } from '@/components/Anchor'
 import { isTypeObject } from '@/components/Content/Schema/helpers/is-type-object'
 import type { Schemas } from '@/features/Operation/types/schemas'
 import { SpecificationExtension } from '@/features/specification-extension'
+import { getResponseDotColor } from '@/helpers/get-response-dot-color'
 import { DISCRIMINATOR_CONTEXT } from '@/hooks/useDiscriminator'
 
 import {
@@ -42,7 +43,7 @@ const props = withDefaults(
     discriminatorMapping?: Record<string, string>
     discriminatorPropertyName?: string
     isDiscriminator?: boolean
-    variant?: 'additionalProperties' | 'patternProperties'
+    variant?: 'additionalProperties' | 'patternProperties' | 'response'
     breadcrumb?: string[]
   }>(),
   {
@@ -262,8 +263,23 @@ const shouldHaveLink = computed(() => props.level <= 1)
               {{ name }}
             </span>
           </template>
+          <template v-else-if="variant === 'response'">
+            <div class="flex items-center gap-2">
+              <svg
+                viewBox="0 0 6 6"
+                aria-hidden="true"
+                class="size-1.5"
+                :fill="getResponseDotColor(name)">
+                <circle
+                  r="3"
+                  cx="3"
+                  cy="3" />
+              </svg>
+              <span>{{ name }}</span>
+            </div></template
+          >
           <template v-else>
-            {{ name }}
+            <span>{{ name }}</span>
           </template>
         </WithBreadcrumb>
       </template>

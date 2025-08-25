@@ -8,12 +8,14 @@ import type { OpenAPIV3_1 } from '@scalar/openapi-types'
 import { computed, ref } from 'vue'
 
 import { SchemaProperty } from '@/components/Content/Schema'
+import { getResponseDotColor } from '@/helpers/get-response-dot-color'
 
 import ContentTypeSelect from './ContentTypeSelect.vue'
 import ParameterHeaders from './ParameterHeaders.vue'
 
 const props = withDefaults(
   defineProps<{
+    mode: 'parameters' | 'responses'
     parameter:
       | NonNullable<RequestEntity['parameters']>[number]
       | NonNullable<RequestEntity['responses']>[number]
@@ -24,6 +26,7 @@ const props = withDefaults(
     breadcrumb?: string[]
   }>(),
   {
+    mode: 'parameters',
     showChildren: false,
     collapsableItems: false,
     withExamples: true,
@@ -77,7 +80,19 @@ const shouldShowParameter = computed(() => {
             weight="bold"
             class="parameter-item-icon size-3 transition-transform duration-100"
             :class="{ 'rotate-90': open }" />
-          <span>{{ parameter.name }}</span>
+          <div class="flex items-center gap-2">
+            <svg
+              viewBox="0 0 6 6"
+              aria-hidden="true"
+              class="size-1.5"
+              :fill="getResponseDotColor(parameter.name)">
+              <circle
+                r="3"
+                cx="3"
+                cy="3" />
+            </svg>
+            <span>{{ parameter.name }}</span>
+          </div>
         </span>
         <span class="parameter-item-type">
           <ScalarMarkdown
@@ -115,6 +130,7 @@ const shouldShowParameter = computed(() => {
                 }
               : parameter.examples || parameter.schema?.examples,
           }"
+          :variant="mode === 'responses' ? 'response' : undefined"
           :withExamples="withExamples" />
       </DisclosurePanel>
     </Disclosure>
